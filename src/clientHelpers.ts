@@ -21,21 +21,24 @@ const API_KEY_HEADER_NAME = "Ocp-Apim-Subscription-Key";
 
 export function createDefaultPipeline(
   baseUrl: string,
-  credential: TokenCredential | KeyCredential,
+  credential?: TokenCredential | KeyCredential,
   options: ClientOptions = {}
 ): Pipeline {
   const pipeline = createPipelineFromOptions(options);
-  const credentialPolicy = isTokenCredential(credential)
-    ? bearerTokenAuthenticationPolicy({
-        credential,
-        scopes: options.credentials?.scopes || `${baseUrl}/.default`,
-      })
-    : keyCredentialAuthenticationPolicy(
-        credential,
-        options.credentials?.apiKeyHeaderName || API_KEY_HEADER_NAME
-      );
 
-  pipeline.addPolicy(credentialPolicy);
+  if (credential) {
+    const credentialPolicy = isTokenCredential(credential)
+      ? bearerTokenAuthenticationPolicy({
+          credential,
+          scopes: options.credentials?.scopes || `${baseUrl}/.default`,
+        })
+      : keyCredentialAuthenticationPolicy(
+          credential,
+          options.credentials?.apiKeyHeaderName || API_KEY_HEADER_NAME
+        );
+
+    pipeline.addPolicy(credentialPolicy);
+  }
 
   return pipeline;
 }

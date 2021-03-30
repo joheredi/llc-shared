@@ -1,10 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getClient = void 0;
+const core_auth_1 = require("@azure/core-auth");
 const clientHelpers_1 = require("./clientHelpers");
 const sendRequest_1 = require("./sendRequest");
 const urlHelpers_1 = require("./urlHelpers");
-function getClient(credentials, baseUrl, options = {}) {
+function getClient(baseUrl, credentialsOrPipelineOptions, opts = {}) {
+    let credentials;
+    let options = opts;
+    if (isCredential(credentialsOrPipelineOptions)) {
+        credentials = credentialsOrPipelineOptions;
+        options = opts;
+    }
+    else {
+        options = credentialsOrPipelineOptions || {};
+    }
     const pipeline = clientHelpers_1.createDefaultPipeline(baseUrl, credentials, options);
     pipeline.removePolicy({ name: "exponentialRetryPolicy" });
     const client = (path, ...args) => {
@@ -37,3 +47,9 @@ function getClient(credentials, baseUrl, options = {}) {
     };
 }
 exports.getClient = getClient;
+function isCredential(param) {
+    if (param.key || core_auth_1.isTokenCredential(param)) {
+        return true;
+    }
+    return false;
+}

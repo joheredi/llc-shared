@@ -17,13 +17,15 @@ const API_KEY_HEADER_NAME = "Ocp-Apim-Subscription-Key";
 function createDefaultPipeline(baseUrl, credential, options = {}) {
     var _a, _b;
     const pipeline = core_rest_pipeline_1.createPipelineFromOptions(options);
-    const credentialPolicy = core_auth_1.isTokenCredential(credential)
-        ? core_rest_pipeline_1.bearerTokenAuthenticationPolicy({
-            credential,
-            scopes: ((_a = options.credentials) === null || _a === void 0 ? void 0 : _a.scopes) || `${baseUrl}/.default`,
-        })
-        : keyCredentialAuthenticationPolicy(credential, ((_b = options.credentials) === null || _b === void 0 ? void 0 : _b.apiKeyHeaderName) || API_KEY_HEADER_NAME);
-    pipeline.addPolicy(credentialPolicy);
+    if (credential) {
+        const credentialPolicy = core_auth_1.isTokenCredential(credential)
+            ? core_rest_pipeline_1.bearerTokenAuthenticationPolicy({
+                credential,
+                scopes: ((_a = options.credentials) === null || _a === void 0 ? void 0 : _a.scopes) || `${baseUrl}/.default`,
+            })
+            : keyCredentialAuthenticationPolicy(credential, ((_b = options.credentials) === null || _b === void 0 ? void 0 : _b.apiKeyHeaderName) || API_KEY_HEADER_NAME);
+        pipeline.addPolicy(credentialPolicy);
+    }
     return pipeline;
 }
 exports.createDefaultPipeline = createDefaultPipeline;

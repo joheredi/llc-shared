@@ -12,19 +12,7 @@ import { TokenCredential } from '@azure/core-auth';
 
 export declare function buildRequestUrl(baseUrl: string, routePath: string, pathParameters: string[], options?: RequestParameters): string;
 
-export declare type ClientOptions = PipelineOptions & {
-    credentials?: {
-        scopes?: string | string[];
-        apiKeyHeaderName?: string;
-    };
-    baseUrl?: string;
-};
-
-export declare function createDefaultPipeline(baseUrl: string, credential: TokenCredential | KeyCredential, options?: ClientOptions): Pipeline;
-
-export declare function getCachedDefaultHttpsClient(): HttpClient;
-
-export declare function getClient(credentials: TokenCredential | KeyCredential, baseUrl: string, options?: PipelineOptions): {
+export declare interface Client {
     path: (path: string, ...args: Array<any>) => {
         get: (options?: RequestParameters) => Promise<HttpResponse>;
         post: (options?: RequestParameters) => Promise<HttpResponse>;
@@ -39,7 +27,23 @@ export declare function getClient(credentials: TokenCredential | KeyCredential, 
         patch: (options?: RequestParameters) => Promise<HttpResponse>;
         delete: (options?: RequestParameters) => Promise<HttpResponse>;
     };
+}
+
+export declare type ClientOptions = PipelineOptions & {
+    credentials?: {
+        scopes?: string | string[];
+        apiKeyHeaderName?: string;
+    };
+    baseUrl?: string;
 };
+
+export declare function createDefaultPipeline(baseUrl: string, credential?: TokenCredential | KeyCredential, options?: ClientOptions): Pipeline;
+
+export declare function getCachedDefaultHttpsClient(): HttpClient;
+
+export declare function getClient(baseUrl: string, options?: PipelineOptions): Client;
+
+export declare function getClient(baseUrl: string, credentials?: TokenCredential | KeyCredential, options?: PipelineOptions): Client;
 
 export declare type HttpResponse = {
     /**

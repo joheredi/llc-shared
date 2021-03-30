@@ -2,7 +2,7 @@ import { KeyCredential, TokenCredential } from "@azure/core-auth";
 import { PipelineOptions } from "@azure/core-rest-pipeline";
 import { HttpResponse } from "./common";
 import { RequestParameters } from "./pathClientTypes";
-export declare function getClient(credentials: TokenCredential | KeyCredential, baseUrl: string, options?: PipelineOptions): {
+export interface Client {
     path: (path: string, ...args: Array<any>) => {
         get: (options?: RequestParameters) => Promise<HttpResponse>;
         post: (options?: RequestParameters) => Promise<HttpResponse>;
@@ -17,5 +17,7 @@ export declare function getClient(credentials: TokenCredential | KeyCredential, 
         patch: (options?: RequestParameters) => Promise<HttpResponse>;
         delete: (options?: RequestParameters) => Promise<HttpResponse>;
     };
-};
+}
+export declare function getClient(baseUrl: string, options?: PipelineOptions): Client;
+export declare function getClient(baseUrl: string, credentials?: TokenCredential | KeyCredential, options?: PipelineOptions): Client;
 //# sourceMappingURL=getClient.d.ts.map

@@ -19,6 +19,26 @@ import { TokenCredential } from '@azure/core-auth';
 export function buildRequestUrl(baseUrl: string, routePath: string, pathParameters: string[], options?: RequestParameters): string;
 
 // @public (undocumented)
+export interface Client {
+    // (undocumented)
+    path: (path: string, ...args: Array<any>) => {
+        get: (options?: RequestParameters) => Promise<HttpResponse>;
+        post: (options?: RequestParameters) => Promise<HttpResponse>;
+        put: (options?: RequestParameters) => Promise<HttpResponse>;
+        patch: (options?: RequestParameters) => Promise<HttpResponse>;
+        delete: (options?: RequestParameters) => Promise<HttpResponse>;
+    };
+    // (undocumented)
+    pathUnckecked: (path: string, ...args: Array<any>) => {
+        get: (options?: RequestParameters) => Promise<HttpResponse>;
+        post: (options?: RequestParameters) => Promise<HttpResponse>;
+        put: (options?: RequestParameters) => Promise<HttpResponse>;
+        patch: (options?: RequestParameters) => Promise<HttpResponse>;
+        delete: (options?: RequestParameters) => Promise<HttpResponse>;
+    };
+}
+
+// @public (undocumented)
 export type ClientOptions = PipelineOptions & {
     credentials?: {
         scopes?: string | string[];
@@ -28,28 +48,16 @@ export type ClientOptions = PipelineOptions & {
 };
 
 // @public (undocumented)
-export function createDefaultPipeline(baseUrl: string, credential: TokenCredential | KeyCredential, options?: ClientOptions): Pipeline;
+export function createDefaultPipeline(baseUrl: string, credential?: TokenCredential | KeyCredential, options?: ClientOptions): Pipeline;
 
 // @public (undocumented)
 export function getCachedDefaultHttpsClient(): HttpClient;
 
 // @public (undocumented)
-export function getClient(credentials: TokenCredential | KeyCredential, baseUrl: string, options?: PipelineOptions): {
-    path: (path: string, ...args: Array<any>) => {
-        get: (options?: RequestParameters) => Promise<HttpResponse>;
-        post: (options?: RequestParameters) => Promise<HttpResponse>;
-        put: (options?: RequestParameters) => Promise<HttpResponse>;
-        patch: (options?: RequestParameters) => Promise<HttpResponse>;
-        delete: (options?: RequestParameters) => Promise<HttpResponse>;
-    };
-    pathUnckecked: (path: string, ...args: Array<any>) => {
-        get: (options?: RequestParameters) => Promise<HttpResponse>;
-        post: (options?: RequestParameters) => Promise<HttpResponse>;
-        put: (options?: RequestParameters) => Promise<HttpResponse>;
-        patch: (options?: RequestParameters) => Promise<HttpResponse>;
-        delete: (options?: RequestParameters) => Promise<HttpResponse>;
-    };
-};
+export function getClient(baseUrl: string, options?: PipelineOptions): Client;
+
+// @public (undocumented)
+export function getClient(baseUrl: string, credentials?: TokenCredential | KeyCredential, options?: PipelineOptions): Client;
 
 // @public (undocumented)
 export type HttpResponse = {
