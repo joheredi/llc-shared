@@ -12,22 +12,12 @@ export type PathUncheckedResponse = PipelineResponse & { body: any };
 
 export type RouteParams<
   TRoute extends string
-> = TRoute extends `:${infer _Param}/${infer Tail}`
+> = TRoute extends `{${infer _Param}}/${infer Tail}`
   ? [pathParam: string, ...pathParams: RouteParams<Tail>]
-  : TRoute extends `:${infer _Param}`
+  : TRoute extends `{${infer _Param}}`
   ? [pathParam: string]
   : TRoute extends `${infer _Prefix}:${infer Tail}`
-  ? RouteParams<`:${Tail}`>
-  : [];
-
-export type LroRouteParams<
-  TRoute extends string
-> = TRoute extends `:${infer _Param}/${infer Tail}`
-  ? [pathParam: string, ...pathParams: RouteParams<Tail>]
-  : TRoute extends `:${infer _Param}`
-  ? [pathParam: string]
-  : TRoute extends `${infer _Prefix}:${infer Tail}`
-  ? RouteParams<`:${Tail}`>
+  ? RouteParams<`{${Tail}}`>
   : [];
 
 export type PathUncheckedClient = <T extends string>(

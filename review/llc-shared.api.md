@@ -24,7 +24,7 @@ export type ClientOptions = PipelineOptions & {
         scopes?: string | string[];
         apiKeyHeaderName?: string;
     };
-    baserUrl?: string;
+    baseUrl?: string;
 };
 
 // @public (undocumented)
@@ -69,9 +69,6 @@ export function keyCredentialAuthenticationPolicy(credential: KeyCredential, api
 export const keyCredentialAuthenticationPolicyName = "keyCredentialAuthenticationPolicy";
 
 // @public (undocumented)
-export type LroRouteParams<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `:${infer _Param}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`:${Tail}`> : [];
-
-// @public (undocumented)
 export type PathUncheckedClient = <T extends string>(path: T, ...args: RouteParams<T>) => {
     post(options?: RequestParameters): Promise<PathUncheckedResponse>;
     put(options?: RequestParameters): Promise<PathUncheckedResponse>;
@@ -97,7 +94,7 @@ export type RequestParameters = {
 };
 
 // @public (undocumented)
-export type RouteParams<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `:${infer _Param}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`:${Tail}`> : [];
+export type RouteParams<TRoute extends string> = TRoute extends `{${infer _Param}}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `{${infer _Param}}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`{${Tail}}`> : [];
 
 // @public (undocumented)
 export function sendRequest(method: HttpMethods, url: string, pipeline: Pipeline, options?: RequestParameters): Promise<HttpResponse>;

@@ -9,7 +9,7 @@ export type ClientOptions = PipelineOptions & {
     scopes?: string | string[];
     apiKeyHeaderName?: string;
   };
-  baserUrl?: string;
+  baseUrl?: string;
 };
 
 export type HttpResponse = {

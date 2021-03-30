@@ -17,7 +17,7 @@ export declare type ClientOptions = PipelineOptions & {
         scopes?: string | string[];
         apiKeyHeaderName?: string;
     };
-    baserUrl?: string;
+    baseUrl?: string;
 };
 
 export declare function createDefaultPipeline(baseUrl: string, credential: TokenCredential | KeyCredential, options?: ClientOptions): Pipeline;
@@ -85,8 +85,6 @@ export declare function keyCredentialAuthenticationPolicy(credential: KeyCredent
  */
 export declare const keyCredentialAuthenticationPolicyName = "keyCredentialAuthenticationPolicy";
 
-export declare type LroRouteParams<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `:${infer _Param}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`:${Tail}`> : [];
-
 export declare type PathUncheckedClient = <T extends string>(path: T, ...args: RouteParams<T>) => {
     post(options?: RequestParameters): Promise<PathUncheckedResponse>;
     put(options?: RequestParameters): Promise<PathUncheckedResponse>;
@@ -109,7 +107,7 @@ export declare type RequestParameters = {
     contentType?: string;
 };
 
-export declare type RouteParams<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `:${infer _Param}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`:${Tail}`> : [];
+export declare type RouteParams<TRoute extends string> = TRoute extends `{${infer _Param}}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `{${infer _Param}}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`{${Tail}}`> : [];
 
 export declare function sendRequest(method: HttpMethods, url: string, pipeline: Pipeline, options?: RequestParameters): Promise<HttpResponse>;
 
