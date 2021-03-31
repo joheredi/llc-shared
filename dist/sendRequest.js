@@ -34,9 +34,11 @@ function sendRequest(method, url, pipeline, options) {
         }
         let parsedBody = undefined;
         try {
-            parsedBody = JSON.parse(result.bodyAsText || "{}");
+            parsedBody = JSON.parse(result.bodyAsText);
         }
-        catch (_a) { }
+        catch (_a) {
+            parsedBody = undefined;
+        }
         return {
             bodyAsText: result.bodyAsText,
             request,
