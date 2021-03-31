@@ -99,6 +99,7 @@ export type RequestParameters = {
         [key: string]: any;
     };
     contentType?: string;
+    allowInsecureConnection?: boolean;
 };
 
 // @public (undocumented)

@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { PipelineOptions, PipelineRequest, RawHttpHeaders } from "@azure/core-rest-pipeline";
+import { PipelineRequest, PipelineOptions, RawHttpHeaders } from "@azure/core-rest-pipeline";
 export declare type ClientOptions = PipelineOptions & {
     credentials?: {
         scopes?: string | string[];

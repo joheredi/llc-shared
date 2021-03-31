@@ -1,6 +1,6 @@
 import {
-  PipelineOptions,
   PipelineRequest,
+  PipelineOptions,
   RawHttpHeaders,
 } from "@azure/core-rest-pipeline";
 

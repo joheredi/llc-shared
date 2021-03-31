@@ -109,6 +109,8 @@ export declare type RequestParameters = {
         [key: string]: any;
     };
     contentType?: string;
+    /** Set to true if the request is sent over HTTP instead of HTTPS */
+    allowInsecureConnection?: boolean;
 };
 
 export declare type RouteParams<TRoute extends string> = TRoute extends `{${infer _Param}}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `{${infer _Param}}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`{${Tail}}`> : [];

@@ -7,6 +7,8 @@ export declare type RequestParameters = {
         [key: string]: any;
     };
     contentType?: string;
+    /** Set to true if the request is sent over HTTP instead of HTTPS */
+    allowInsecureConnection?: boolean;
 };
 export declare type PathUncheckedResponse = PipelineResponse & {
     body: any;
