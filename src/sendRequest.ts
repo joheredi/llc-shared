@@ -34,6 +34,7 @@ export async function sendRequest(
     method,
     body,
     headers,
+    allowInsecureConnection: options.allowInsecureConnection,
   });
 
   const result = await pipeline.sendRequest(httpClient, request);

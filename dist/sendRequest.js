@@ -25,6 +25,7 @@ function sendRequest(method, url, pipeline, options) {
             method,
             body,
             headers,
+            allowInsecureConnection: options.allowInsecureConnection,
         });
         const result = yield pipeline.sendRequest(httpClient, request);
         let rawHeaders = {};
