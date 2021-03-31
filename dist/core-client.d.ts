@@ -20,7 +20,7 @@ export declare interface Client {
         patch: (options?: RequestParameters) => Promise<HttpResponse>;
         delete: (options?: RequestParameters) => Promise<HttpResponse>;
     };
-    pathUnckecked: (path: string, ...args: Array<any>) => {
+    pathUnchecked: (path: string, ...args: Array<any>) => {
         get: (options?: RequestParameters) => Promise<HttpResponse>;
         post: (options?: RequestParameters) => Promise<HttpResponse>;
         put: (options?: RequestParameters) => Promise<HttpResponse>;

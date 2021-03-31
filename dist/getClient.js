@@ -43,7 +43,7 @@ function getClient(baseUrl, credentialsOrPipelineOptions, opts = {}) {
     };
     return {
         path: client,
-        pathUnckecked: client,
+        pathUnchecked: client,
     };
 }
 exports.getClient = getClient;

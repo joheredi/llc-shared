@@ -29,7 +29,7 @@ export interface Client {
         delete: (options?: RequestParameters) => Promise<HttpResponse>;
     };
     // (undocumented)
-    pathUnckecked: (path: string, ...args: Array<any>) => {
+    pathUnchecked: (path: string, ...args: Array<any>) => {
         get: (options?: RequestParameters) => Promise<HttpResponse>;
         post: (options?: RequestParameters) => Promise<HttpResponse>;
         put: (options?: RequestParameters) => Promise<HttpResponse>;

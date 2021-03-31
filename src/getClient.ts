@@ -21,7 +21,7 @@ export interface Client {
     patch: (options?: RequestParameters) => Promise<HttpResponse>;
     delete: (options?: RequestParameters) => Promise<HttpResponse>;
   };
-  pathUnckecked: (
+  pathUnchecked: (
     path: string,
     ...args: Array<any>
   ) => {
@@ -84,7 +84,7 @@ export function getClient(
 
   return {
     path: client,
-    pathUnckecked: client,
+    pathUnchecked: client,
   };
 }
 
