@@ -47,9 +47,6 @@ function sendRequest(method, url, pipeline, options) {
 }
 exports.sendRequest = sendRequest;
 function getContentType(body) {
-    if (!body) {
-        return undefined;
-    }
     try {
         JSON.parse(body);
         return "application/json; charset=UTF-8";

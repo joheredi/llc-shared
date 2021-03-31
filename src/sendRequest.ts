@@ -57,9 +57,6 @@ export async function sendRequest(
 }
 
 function getContentType(body: any) {
-  if (!body) {
-    return undefined;
-  }
   try {
     JSON.parse(body);
     return "application/json; charset=UTF-8";
