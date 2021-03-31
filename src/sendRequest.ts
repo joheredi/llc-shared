@@ -46,8 +46,10 @@ export async function sendRequest(
   let parsedBody = undefined;
 
   try {
-    parsedBody = JSON.parse(result.bodyAsText || "{}");
-  } catch {}
+    parsedBody = JSON.parse(result.bodyAsText);
+  } catch {
+    parsedBody = undefined;
+  }
 
   return {
     bodyAsText: result.bodyAsText,
