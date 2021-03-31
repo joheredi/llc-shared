@@ -16,10 +16,7 @@ function sendRequest(method, url, pipeline, options) {
     return __awaiter(this, void 0, void 0, function* () {
         const httpClient = clientHelpers_1.getCachedDefaultHttpsClient();
         const headers = core_rest_pipeline_1.createHttpHeaders(Object.assign({ accept: "application/json", "content-type": options.contentType || getContentType(options.body) }, (options.headers ? options.headers : {})));
-        let body = undefined;
-        if (options.body) {
-            body = JSON.stringify(options.body);
-        }
+        const body = JSON.stringify(options.body);
         const request = core_rest_pipeline_1.createPipelineRequest({
             url: url.toString(),
             method,

@@ -23,11 +23,7 @@ export async function sendRequest(
     ...(options.headers ? options.headers : {}),
   });
 
-  let body = undefined;
-
-  if (options.body) {
-    body = JSON.stringify(options.body);
-  }
+  const body = JSON.stringify(options.body);
 
   const request = createPipelineRequest({
     url: url.toString(),
