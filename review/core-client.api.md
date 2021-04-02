@@ -64,7 +64,7 @@ export type HttpResponse = {
     request: PipelineRequest;
     status: number;
     headers: RawHttpHeaders;
-    body: any;
+    body: unknown;
     bodyAsText?: string | null;
     blobBody?: Promise<Blob>;
     readableStreamBody?: NodeJS.ReadableStream;

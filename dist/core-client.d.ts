@@ -61,7 +61,7 @@ export declare type HttpResponse = {
     /**
      * Parsed body
      */
-    body: any;
+    body: unknown;
     /**
      * The response body as text (string format)
      */
