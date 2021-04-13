@@ -1,34 +1,43 @@
-import { PipelineResponse, RawHttpHeaders } from "@azure/core-rest-pipeline";
+import { RawHttpHeaders } from "@azure/core-rest-pipeline";
 
+/**
+ * Shape of the default request parameters, this may be overriden by the specific
+ * request types to provide strong types
+ */
 export type RequestParameters = {
-  timeout?: number;
+  /**
+   * Headers to send along with the request
+   */
   headers?: RawHttpHeaders;
+  /**
+   * Sets the accept header to send to the service
+   * defaults to 'application/json'
+   */
+  accept?: string;
+  /**
+   * Body to send with the request
+   */
   body?: unknown;
-  queryParameters?: { [key: string]: any };
+  /**
+   * Query parameters to send with the request
+   */
+  queryParameters?: Record<string, unknown>;
+  /**
+   * Set an explicit content-type to send with the request
+   */
   contentType?: string;
   /** Set to true if the request is sent over HTTP instead of HTTPS */
   allowInsecureConnection?: boolean;
 };
 
-export type PathUncheckedResponse = PipelineResponse & { body: any };
-
-export type RouteParams<
-  TRoute extends string
-> = TRoute extends `{${infer _Param}}/${infer Tail}`
+/**
+ * Helper type used to detect parameters in a path template
+ * keys surounded by {} will be considered a path parameter
+ */
+export type RouteParams<TRoute extends string> = TRoute extends `{${infer _Param}}/${infer Tail}`
   ? [pathParam: string, ...pathParams: RouteParams<Tail>]
   : TRoute extends `{${infer _Param}}`
   ? [pathParam: string]
   : TRoute extends `${infer _Prefix}:${infer Tail}`
   ? RouteParams<`{${Tail}}`>
   : [];
-
-export type PathUncheckedClient = <T extends string>(
-  path: T,
-  ...args: RouteParams<T>
-) => {
-  post(options?: RequestParameters): Promise<PathUncheckedResponse>;
-  put(options?: RequestParameters): Promise<PathUncheckedResponse>;
-  patch(options?: RequestParameters): Promise<PathUncheckedResponse>;
-  get(options?: RequestParameters): Promise<PathUncheckedResponse>;
-  delete(options?: RequestParameters): Promise<PathUncheckedResponse>;
-};

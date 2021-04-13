@@ -3,11 +3,14 @@
   "version": "1.0.0-beta.1",
   "description": "",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build && npm run extract-api",
     "extract-api": "api-extractor run --local"
+  },
+  "browser": {
+    "./dist-esm/src/url.js": "./dist-esm/src/url.browser.js"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +20,7 @@
     "@azure/core-rest-pipeline": "latest"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.13.2",
+    "@microsoft/api-extractor": "7.7.11",
     "@types/node": "^14.14.22",
     "dotenv": "^8.2.0",
     "prettier": "^2.2.1",

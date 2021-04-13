@@ -12,53 +12,55 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendRequest = void 0;
 const core_rest_pipeline_1 = require("@azure/core-rest-pipeline");
 const clientHelpers_1 = require("./clientHelpers");
-function sendRequest(method, url, pipeline, options) {
+/**
+ * Helper function to send request used by the client
+ * @param method method to use to send the request
+ * @param url url to send the request to
+ * @param pipeline pipeline with the policies to run when sending the request
+ * @param options request options
+ * @returns returns and HttpResponse
+ */
+function sendRequest(method, url, pipeline, options = {}) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const httpClient = clientHelpers_1.getCachedDefaultHttpsClient();
-        const headers = core_rest_pipeline_1.createHttpHeaders(Object.assign({ accept: "application/json", "content-type": options.contentType || getContentType(options.body) }, (options.headers ? options.headers : {})));
-        const body = JSON.stringify(options.body);
+        const body = options.body !== undefined ? JSON.stringify(options.body) : undefined;
+        const headers = core_rest_pipeline_1.createHttpHeaders(Object.assign(Object.assign(Object.assign({}, (body !== undefined && { accept: (_a = options.accept) !== null && _a !== void 0 ? _a : "application/json" })), { "content-type": (_b = options.contentType) !== null && _b !== void 0 ? _b : getContentType(options.body) }), (options.headers ? options.headers : {})));
         const request = core_rest_pipeline_1.createPipelineRequest({
-            url: url.toString(),
+            url,
             method,
             body,
             headers,
             allowInsecureConnection: options.allowInsecureConnection,
         });
         const result = yield pipeline.sendRequest(httpClient, request);
-        let rawHeaders = {};
-        for (const [key, value] of result.headers) {
-            rawHeaders[key] = value;
-        }
+        const rawHeaders = result.headers.toJSON();
         let parsedBody = undefined;
         try {
-            parsedBody = JSON.parse(result.bodyAsText);
+            parsedBody = result.bodyAsText ? JSON.parse(result.bodyAsText) : undefined;
         }
-        catch (_a) {
+        catch (_c) {
             parsedBody = undefined;
         }
         return {
-            bodyAsText: result.bodyAsText,
             request,
             headers: rawHeaders,
-            status: result.status,
+            status: `${result.status}`,
             body: parsedBody,
         };
     });
 }
 exports.sendRequest = sendRequest;
+/**
+ * Function to determine the content-type of a body
+ * this is used if an explicit content-type is not provided
+ * @param body body in the request
+ * @returns returns the content-type
+ */
 function getContentType(body) {
-    try {
-        const jsonBody = JSON.stringify(body);
-        JSON.parse(jsonBody);
-        return "application/json; charset=UTF-8";
-    }
-    catch (_a) { }
-    if (typeof body === "string") {
-        return "text/plain";
-    }
     if (ArrayBuffer.isView(body)) {
         return "application/octet-stream";
     }
-    // Default, we may want to log a warning
+    // By default return json
     return "application/json; charset=UTF-8";
 }

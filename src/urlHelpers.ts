@@ -1,5 +1,14 @@
 import { RequestParameters } from "./pathClientTypes";
+import { URL } from "./url";
 
+/**
+ * Builds the request url, filling in query and path parameters
+ * @param baseUrl base url which can be a template url
+ * @param routePath path to append to the baseUrl
+ * @param pathParameters values of the path parameters
+ * @param options request parameters including query parameters
+ * @returns a full url with path and query parameters
+ */
 export function buildRequestUrl(
   baseUrl: string,
   routePath: string,
@@ -13,7 +22,7 @@ export function buildRequestUrl(
   }
 
   for (const pathParam of pathParameters) {
-    path = path.replace(/:([^\/]+)/, pathParam);
+    path = path.replace(/{([^\/]+)}/, pathParam);
   }
 
   const url = new URL(`${baseUrl}/${path}`);
@@ -21,7 +30,11 @@ export function buildRequestUrl(
   if (options.queryParameters) {
     const queryParams = options.queryParameters;
     for (const key of Object.keys(queryParams)) {
-      url.searchParams.append(key, (queryParams as any)[key]);
+      const param = queryParams[key] as any;
+      if (!param.toString || typeof param.toString !== "function") {
+        throw new Error(`Query parameters must be able to be represented as string, ${key} can't`);
+      }
+      url.searchParams.append(key, param.toString());
     }
   }
 

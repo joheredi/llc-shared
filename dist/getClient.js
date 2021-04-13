@@ -8,15 +8,16 @@ const urlHelpers_1 = require("./urlHelpers");
 function getClient(baseUrl, credentialsOrPipelineOptions, opts = {}) {
     let credentials;
     let options = opts;
-    if (isCredential(credentialsOrPipelineOptions)) {
-        credentials = credentialsOrPipelineOptions;
-        options = opts;
-    }
-    else {
-        options = credentialsOrPipelineOptions || {};
+    if (credentialsOrPipelineOptions) {
+        if (isCredential(credentialsOrPipelineOptions)) {
+            credentials = credentialsOrPipelineOptions;
+            options = opts;
+        }
+        else {
+            options = credentialsOrPipelineOptions || {};
+        }
     }
     const pipeline = clientHelpers_1.createDefaultPipeline(baseUrl, credentials, options);
-    pipeline.removePolicy({ name: "exponentialRetryPolicy" });
     const client = (path, ...args) => {
         return {
             get: (options = {}) => {
@@ -39,6 +40,18 @@ function getClient(baseUrl, credentialsOrPipelineOptions, opts = {}) {
                 const url = urlHelpers_1.buildRequestUrl(baseUrl, path, args, options);
                 return sendRequest_1.sendRequest("DELETE", url, pipeline, options);
             },
+            head: (options = {}) => {
+                const url = urlHelpers_1.buildRequestUrl(baseUrl, path, args, options);
+                return sendRequest_1.sendRequest("HEAD", url, pipeline, options);
+            },
+            options: (options = {}) => {
+                const url = urlHelpers_1.buildRequestUrl(baseUrl, path, args, options);
+                return sendRequest_1.sendRequest("OPTIONS", url, pipeline, options);
+            },
+            trace: (options = {}) => {
+                const url = urlHelpers_1.buildRequestUrl(baseUrl, path, args, options);
+                return sendRequest_1.sendRequest("TRACE", url, pipeline, options);
+            },
         };
     };
     return {
@@ -48,7 +61,7 @@ function getClient(baseUrl, credentialsOrPipelineOptions, opts = {}) {
 }
 exports.getClient = getClient;
 function isCredential(param) {
-    if (param.key || core_auth_1.isTokenCredential(param)) {
+    if (param.key !== undefined || core_auth_1.isTokenCredential(param)) {
         return true;
     }
     return false;

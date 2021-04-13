@@ -9,24 +9,32 @@ import { getCachedDefaultHttpsClient } from "./clientHelpers";
 import { RequestParameters } from "./pathClientTypes";
 import { HttpResponse } from "./common";
 
+/**
+ * Helper function to send request used by the client
+ * @param method method to use to send the request
+ * @param url url to send the request to
+ * @param pipeline pipeline with the policies to run when sending the request
+ * @param options request options
+ * @returns returns and HttpResponse
+ */
 export async function sendRequest(
   method: HttpMethods,
   url: string,
   pipeline: Pipeline,
-  options?: RequestParameters
+  options: RequestParameters = {}
 ): Promise<HttpResponse> {
   const httpClient = getCachedDefaultHttpsClient();
 
+  const body = options.body !== undefined ? JSON.stringify(options.body) : undefined;
+
   const headers = createHttpHeaders({
-    accept: "application/json",
-    "content-type": options.contentType || getContentType(options.body),
+    ...(body !== undefined && { accept: options.accept ?? "application/json" }),
+    "content-type": options.contentType ?? getContentType(options.body),
     ...(options.headers ? options.headers : {}),
   });
 
-  const body = JSON.stringify(options.body);
-
   const request = createPipelineRequest({
-    url: url.toString(),
+    url,
     method,
     body,
     headers,
@@ -34,43 +42,35 @@ export async function sendRequest(
   });
 
   const result = await pipeline.sendRequest(httpClient, request);
-  let rawHeaders: RawHttpHeaders = {};
-  for (const [key, value] of result.headers) {
-    rawHeaders[key] = value;
-  }
+  const rawHeaders: RawHttpHeaders = result.headers.toJSON();
 
   let parsedBody = undefined;
 
   try {
-    parsedBody = JSON.parse(result.bodyAsText);
+    parsedBody = result.bodyAsText ? JSON.parse(result.bodyAsText) : undefined;
   } catch {
     parsedBody = undefined;
   }
 
   return {
-    bodyAsText: result.bodyAsText,
     request,
     headers: rawHeaders,
-    status: result.status,
+    status: `${result.status}`,
     body: parsedBody,
   };
 }
 
-function getContentType(body: any) {
-  try {
-    const jsonBody = JSON.stringify(body);
-    JSON.parse(jsonBody);
-    return "application/json; charset=UTF-8";
-  } catch {}
-
-  if (typeof body === "string") {
-    return "text/plain";
-  }
-
+/**
+ * Function to determine the content-type of a body
+ * this is used if an explicit content-type is not provided
+ * @param body body in the request
+ * @returns returns the content-type
+ */
+function getContentType(body: any): string {
   if (ArrayBuffer.isView(body)) {
     return "application/octet-stream";
   }
 
-  // Default, we may want to log a warning
+  // By default return json
   return "application/json; charset=UTF-8";
 }

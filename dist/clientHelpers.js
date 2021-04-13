@@ -1,54 +1,40 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.keyCredentialAuthenticationPolicy = exports.keyCredentialAuthenticationPolicyName = exports.getCachedDefaultHttpsClient = exports.createDefaultPipeline = void 0;
+exports.getCachedDefaultHttpsClient = exports.createDefaultPipeline = void 0;
 const core_rest_pipeline_1 = require("@azure/core-rest-pipeline");
 const core_auth_1 = require("@azure/core-auth");
-let cachedHttpsClient;
-const API_KEY_HEADER_NAME = "Ocp-Apim-Subscription-Key";
+const keyCredentialAuthenticationPolicy_1 = require("./keyCredentialAuthenticationPolicy");
+let cachedHttpClient;
+/**
+ * Creates a default rest pipeline to re-use accross Rest Level Clients
+ */
 function createDefaultPipeline(baseUrl, credential, options = {}) {
-    var _a, _b;
+    var _a, _b, _c, _d;
     const pipeline = core_rest_pipeline_1.createPipelineFromOptions(options);
+    pipeline.removePolicy({ name: "exponentialRetryPolicy" });
     if (credential) {
-        const credentialPolicy = core_auth_1.isTokenCredential(credential)
-            ? core_rest_pipeline_1.bearerTokenAuthenticationPolicy({
+        let credentialPolicy;
+        if (core_auth_1.isTokenCredential(credential)) {
+            credentialPolicy = core_rest_pipeline_1.bearerTokenAuthenticationPolicy({
                 credential,
-                scopes: ((_a = options.credentials) === null || _a === void 0 ? void 0 : _a.scopes) || `${baseUrl}/.default`,
-            })
-            : keyCredentialAuthenticationPolicy(credential, ((_b = options.credentials) === null || _b === void 0 ? void 0 : _b.apiKeyHeaderName) || API_KEY_HEADER_NAME);
+                scopes: (_b = (_a = options.credentials) === null || _a === void 0 ? void 0 : _a.scopes) !== null && _b !== void 0 ? _b : `${baseUrl}/.default`,
+            });
+        }
+        else {
+            if (!((_c = options.credentials) === null || _c === void 0 ? void 0 : _c.apiKeyHeaderName)) {
+                throw new Error(`Missing API Key Header Name`);
+            }
+            credentialPolicy = keyCredentialAuthenticationPolicy_1.keyCredentialAuthenticationPolicy(credential, (_d = options.credentials) === null || _d === void 0 ? void 0 : _d.apiKeyHeaderName);
+        }
         pipeline.addPolicy(credentialPolicy);
     }
     return pipeline;
 }
 exports.createDefaultPipeline = createDefaultPipeline;
 function getCachedDefaultHttpsClient() {
-    if (!cachedHttpsClient) {
-        cachedHttpsClient = core_rest_pipeline_1.createDefaultHttpClient();
+    if (!cachedHttpClient) {
+        cachedHttpClient = core_rest_pipeline_1.createDefaultHttpClient();
     }
-    return cachedHttpsClient;
+    return cachedHttpClient;
 }
 exports.getCachedDefaultHttpsClient = getCachedDefaultHttpsClient;
-/**
- * The programmatic identifier of the bearerTokenAuthenticationPolicy.
- */
-exports.keyCredentialAuthenticationPolicyName = "keyCredentialAuthenticationPolicy";
-function keyCredentialAuthenticationPolicy(credential, apiKeyHeaderName) {
-    return {
-        name: exports.keyCredentialAuthenticationPolicyName,
-        sendRequest(request, next) {
-            return __awaiter(this, void 0, void 0, function* () {
-                request.headers.set(apiKeyHeaderName, credential.key);
-                return next(request);
-            });
-        },
-    };
-}
-exports.keyCredentialAuthenticationPolicy = keyCredentialAuthenticationPolicy;

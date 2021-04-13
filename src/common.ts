@@ -1,9 +1,8 @@
-import {
-  PipelineRequest,
-  PipelineOptions,
-  RawHttpHeaders,
-} from "@azure/core-rest-pipeline";
+import { PipelineOptions, RawHttpHeaders, PipelineRequest } from "@azure/core-rest-pipeline";
 
+/**
+ * General options that a Rest Level Client can take
+ */
 export type ClientOptions = PipelineOptions & {
   credentials?: {
     scopes?: string | string[];
@@ -12,15 +11,14 @@ export type ClientOptions = PipelineOptions & {
   baseUrl?: string;
 };
 
+/**
+ * Represents the shape of an HttpResponse
+ */
 export type HttpResponse = {
   /**
    * The request that generated this response.
    */
   request: PipelineRequest;
-  /**
-   * The HTTP status code of the response.
-   */
-  status: number;
   /**
    * The HTTP response headers.
    */
@@ -30,21 +28,7 @@ export type HttpResponse = {
    */
   body: unknown;
   /**
-   * The response body as text (string format)
+   * The HTTP status code of the response.
    */
-  bodyAsText?: string | null;
-  /**
-   * BROWSER ONLY
-   *
-   * The response body as a browser Blob.
-   * Always undefined in node.js.
-   */
-  blobBody?: Promise<Blob>;
-  /**
-   * NODEJS ONLY
-   *
-   * The response body as a node.js Readable stream.
-   * Always undefined in the browser.
-   */
-  readableStreamBody?: NodeJS.ReadableStream;
+  status: string;
 };
