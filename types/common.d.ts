@@ -8,6 +8,10 @@ export declare type ClientOptions = PipelineOptions & {
         apiKeyHeaderName?: string;
     };
     baseUrl?: string;
+    /**
+     * Options for setting a custom apiVersion.
+     */
+    apiVersion?: string;
 };
 /**
  * Represents the shape of an HttpResponse

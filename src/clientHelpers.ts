@@ -6,7 +6,11 @@ import {
   HttpClient,
   PipelinePolicy,
 } from "@azure/core-rest-pipeline";
-import { TokenCredential, KeyCredential, isTokenCredential } from "@azure/core-auth";
+import {
+  TokenCredential,
+  KeyCredential,
+  isTokenCredential,
+} from "@azure/core-auth";
 import { ClientOptions } from "./common";
 import { keyCredentialAuthenticationPolicy } from "./keyCredentialAuthenticationPolicy";
 

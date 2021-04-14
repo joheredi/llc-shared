@@ -25,7 +25,9 @@ function sendRequest(method, url, pipeline, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         const httpClient = clientHelpers_1.getCachedDefaultHttpsClient();
         const body = options.body !== undefined ? JSON.stringify(options.body) : undefined;
-        const headers = core_rest_pipeline_1.createHttpHeaders(Object.assign(Object.assign(Object.assign({}, (body !== undefined && { accept: (_a = options.accept) !== null && _a !== void 0 ? _a : "application/json" })), { "content-type": (_b = options.contentType) !== null && _b !== void 0 ? _b : getContentType(options.body) }), (options.headers ? options.headers : {})));
+        const headers = core_rest_pipeline_1.createHttpHeaders(Object.assign(Object.assign({ accept: (_a = options.accept) !== null && _a !== void 0 ? _a : "application/json" }, (body !== undefined && {
+            "content-type": (_b = options.contentType) !== null && _b !== void 0 ? _b : getContentType(options.body),
+        })), (options.headers ? options.headers : {})));
         const request = core_rest_pipeline_1.createPipelineRequest({
             url,
             method,

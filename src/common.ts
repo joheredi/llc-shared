@@ -1,4 +1,8 @@
-import { PipelineOptions, RawHttpHeaders, PipelineRequest } from "@azure/core-rest-pipeline";
+import {
+  PipelineOptions,
+  RawHttpHeaders,
+  PipelineRequest,
+} from "@azure/core-rest-pipeline";
 
 /**
  * General options that a Rest Level Client can take
@@ -9,6 +13,10 @@ export type ClientOptions = PipelineOptions & {
     apiKeyHeaderName?: string;
   };
   baseUrl?: string;
+  /**
+   * Options for setting a custom apiVersion.
+   */
+  apiVersion?: string;
 };
 
 /**

@@ -34,7 +34,9 @@ export type RequestParameters = {
  * Helper type used to detect parameters in a path template
  * keys surounded by {} will be considered a path parameter
  */
-export type RouteParams<TRoute extends string> = TRoute extends `{${infer _Param}}/${infer Tail}`
+export type RouteParams<
+  TRoute extends string
+> = TRoute extends `{${infer _Param}}/${infer Tail}`
   ? [pathParam: string, ...pathParams: RouteParams<Tail>]
   : TRoute extends `{${infer _Param}}`
   ? [pathParam: string]

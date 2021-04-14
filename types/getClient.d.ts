@@ -1,6 +1,6 @@
 import { KeyCredential, TokenCredential } from "@azure/core-auth";
 import { PipelineOptions } from "@azure/core-rest-pipeline";
-import { HttpResponse } from "./common";
+import { ClientOptions, HttpResponse } from "./common";
 import { RequestParameters } from "./pathClientTypes";
 /**
  * Type to use with pathUnchecked, overrides the body type to any to allow flexibility
@@ -43,5 +43,5 @@ export declare function getClient(baseUrl: string, options?: PipelineOptions): C
  * @param credentials Credentials to authenticate the requests
  * @param options Client options
  */
-export declare function getClient(baseUrl: string, credentials?: TokenCredential | KeyCredential, options?: PipelineOptions): Client;
+export declare function getClient(baseUrl: string, credentials?: TokenCredential | KeyCredential, options?: ClientOptions): Client;
 //# sourceMappingURL=getClient.d.ts.map
